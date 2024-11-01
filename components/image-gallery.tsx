@@ -1,21 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-
+import images from "@/data/asobi.json";
 export default function Component() {
-  const images = [
-    {
-      src: "/assets/images/asobi/glb-sample1/thumbnail.png",
-      alt: "Image 1",
-      width: 640,
-      height: 360,
-      link: "/asobi/gameboy-exploded-view",
-      title: "Game Boy - Exploded View",
-    },
-  ];
-
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Artwork Gallery</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        あそびば - Asobiba -
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {images.map((artwork, index) => (
           <div

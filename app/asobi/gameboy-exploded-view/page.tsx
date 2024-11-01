@@ -1,5 +1,6 @@
 import { GlbLoader } from "@/components/glb-loader";
 import AsobiLayout from "@/app/asobi/layout";
+import data from "@/data/asobi.json";
 
 /**
  * モデルを表示するサンプル
@@ -7,7 +8,7 @@ import AsobiLayout from "@/app/asobi/layout";
  */
 export default function GlbSample1() {
   return (
-    <AsobiLayout>
+    <AsobiLayout title={data[0].title} description={data[0].description}>
       <GlbLoader />
     </AsobiLayout>
   );

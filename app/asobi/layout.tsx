@@ -3,8 +3,12 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AsobiLayout({
+  title,
+  description,
   children,
 }: {
+  title: string;
+  description: string;
   children: React.ReactNode;
 }) {
   return (
@@ -15,11 +19,10 @@ export default function AsobiLayout({
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none">
         <div className="absolute top-4 left-4">
           <h1 className="text-2xl font-bold text-white mb-2 pointer-events-auto">
-            Game Boy - Exploded View
+            {title}
           </h1>
           <p className="text-white/90 text-sm pointer-events-auto">
-            Exploded view of Nintendo Game Boy components, glb model with
-            animation.
+            {description}
           </p>
         </div>
         <div className="absolute bottom-4 left-4">

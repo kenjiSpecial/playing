@@ -8,7 +8,6 @@ import {
   Environment,
   useAnimations,
 } from "@react-three/drei";
-// import { Group } from "three";
 import { useControls } from "leva";
 
 function Model({ url }: { url: string }) {
