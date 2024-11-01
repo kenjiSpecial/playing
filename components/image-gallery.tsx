@@ -1,18 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Component() {
   const images = [
     {
-      src: "/placeholder.svg?height=300&width=400",
+      src: "/assets/images/asobi/glb-sample1/thumbnail.png",
       alt: "Image 1",
-      width: 400,
-      height: 300,
-    },
-    {
-      src: "/placeholder.svg?height=400&width=300",
-      alt: "Image 2",
-      width: 300,
-      height: 400,
+      width: 640,
+      height: 360,
+      link: "/asobi/glb-sample1",
     },
   ];
 
@@ -23,15 +19,17 @@ export default function Component() {
         {images.map((image, index) => (
           <div
             key={index}
-            className="relative aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
+            className="relative aspect-video overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300"
           >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              layout="fill"
-              objectFit="cover"
-              className="transition-transform duration-300 hover:scale-105"
-            />
+            <Link href={image.link}>
+              <Image
+                src={image.src}
+                alt={image.alt}
+                layout="fill"
+                objectFit="cover"
+                className="transition-transform duration-300 hover:scale-105"
+              />
+            </Link>
           </div>
         ))}
       </div>
