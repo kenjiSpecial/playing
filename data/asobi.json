@@ -7,5 +7,14 @@
     "width": 640,
     "height": 360,
     "description": "Exploded view of Nintendo Game Boy components, glb model with animation."
+  },
+  {
+    "title": "Virtual Bowling Fun",
+    "link": "/asobi/bowling",
+    "src": "/assets/images/asobi/bowling/thumbnail.png",
+    "alt": "Virtual Bowling Fun",
+    "width": 640,
+    "height": 360,
+    "description": "Enjoy a simple yet engaging 3D bowling experience."
   }
 ]

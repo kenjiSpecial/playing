@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function AsobiLayout({
+export default function Cover({
   title,
   description,
   children,
@@ -13,11 +13,11 @@ export default function AsobiLayout({
 }) {
   return (
     // full width and height
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-svh bg-orange-600 flex items-center justify-center">
       {/* children */}
       {children}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none">
-        <div className="absolute top-4 left-4">
+      <div className="absolute inset-0  pointer-events-none">
+        <div className="absolute top-0 left-0 p-4">
           <h1 className="text-2xl font-bold text-white mb-2 pointer-events-auto">
             {title}
           </h1>

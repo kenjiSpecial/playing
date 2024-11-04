@@ -1,4 +1,4 @@
-import { GlbLoader } from "@/components/glb-loader";
+import { BowlingGame } from "@/components/bowling-game";
 import AsobiCover from "@/app/asobi/components/cover";
 import data from "@/data/asobi.json";
 
@@ -8,8 +8,8 @@ import data from "@/data/asobi.json";
  */
 export default function GlbSample1() {
   return (
-    <AsobiCover title={data[0].title} description={data[0].description}>
-      <GlbLoader />
+    <AsobiCover title={data[1].title} description={data[1].description}>
+      <BowlingGame />
     </AsobiCover>
   );
 }
