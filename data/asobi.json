@@ -16,5 +16,14 @@
     "width": 640,
     "height": 360,
     "description": "Enjoy a simple yet engaging 3D bowling experience."
+  },
+  {
+    "title": "Baseball Game",
+    "link": "/asobi/baseball",
+    "src": "/assets/images/asobi/baseball/thumbnail.png",
+    "alt": "Baseball Game",
+    "width": 640,
+    "height": 360,
+    "description": "Enjoy a simple yet engaging 3D baseball experience."
   }
 ]

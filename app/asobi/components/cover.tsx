@@ -13,7 +13,7 @@ export default function Cover({
 }) {
   return (
     // full width and height
-    <div className="relative w-full h-svh bg-orange-600 flex items-center justify-center">
+    <div className="relative w-full h-svh flex items-center justify-center">
       {/* children */}
       {children}
       <div className="absolute inset-0  pointer-events-none">
