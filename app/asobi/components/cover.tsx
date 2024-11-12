@@ -18,10 +18,10 @@ export default function Cover({
       {children}
       <div className="absolute inset-0  pointer-events-none">
         <div className="absolute top-0 left-0 p-4">
-          <h1 className="text-2xl font-bold text-white mb-2 pointer-events-auto">
+          <h1 className="text-2xl font-bold text-white mb-2 pointer-events-auto select-none">
             {title}
           </h1>
-          <p className="text-white/90 text-sm pointer-events-auto">
+          <p className="text-white/90 text-sm pointer-events-auto select-none">
             {description}
           </p>
         </div>
@@ -29,10 +29,10 @@ export default function Cover({
           <Button
             variant="ghost"
             size="sm"
-            className="text-white hover:text-white hover:bg-black/20 pointer-events-auto"
+            className="text-white hover:text-white hover:bg-black/20 pointer-events-auto select-none"
             asChild
           >
-            <Link href="/" className="pointer-events-auto">
+            <Link href="/" className="pointer-events-auto select-none">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Link>

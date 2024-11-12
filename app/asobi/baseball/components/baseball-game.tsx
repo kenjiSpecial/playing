@@ -2,13 +2,10 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import {
-  CollideEvent,
   Debug,
   Physics,
-  PublicApi,
   useBox,
   usePlane,
-  useSphere,
   useTrimesh,
 } from "@react-three/cannon";
 import { OrbitControls, useGLTF } from "@react-three/drei";
@@ -21,276 +18,22 @@ import {
   useMemo,
 } from "react";
 import gsap from "gsap";
-import { DoubleSide, Group, Mesh, ShaderMaterial, Vector3 } from "three";
+import {
+  DoubleSide,
+  Group,
+  Mesh,
+  PerspectiveCamera,
+  ShaderMaterial,
+  Vector3,
+} from "three";
 import { FireEffect } from "./fire-effect";
 import { smoothstep } from "three/src/math/MathUtils.js";
 import { TouchEffect } from "./touch-effect";
-
-function Ball({
-  position,
-  isThrowing,
-  setEffectPosition,
-  setIsThrowing,
-  setFireEffect,
-  setIsFireEffectOn,
-}: {
-  position: [number, number, number];
-  isThrowing: boolean;
-  setEffectPosition: Dispatch<SetStateAction<[number, number, number]>>;
-  setIsThrowing: Dispatch<SetStateAction<boolean>>;
-  setFireEffect: Dispatch<SetStateAction<boolean>>;
-  setIsFireEffectOn: Dispatch<SetStateAction<boolean>>;
-}) {
-  const { nodes, materials } = useGLTF("/assets/3d/baseball-ball.glb");
-  const [forceReset, setForceReset] = useState(false);
-  const [throwValue, setThrowValue] = useState(0);
-  const [ballScale, setBallScale] = useState(1);
-  const [ballThrowingScale, setBallThrowingScale] = useState(1);
-  const [strechScale, setStrechScale] = useState(1);
-  const throwValueRef = useRef(0);
-  const ballScaleRef = useRef(1);
-  const ballThrowingScaleRef = useRef(1);
-  const strechScaleRef = useRef(1);
-
-  const [ref, api] = useSphere(
-    () => ({
-      mass: 1,
-      position,
-      args: [0.3],
-      onCollide: handleCollide,
-    }),
-    useRef<Group>(null)
-  );
-
-  const batApiRef = useRef<PublicApi | null>(null);
-
-  useEffect(() => {
-    batApiRef.current = api;
-  }, [api]);
-
-  useEffect(() => {
-    startAutoThrow();
-  }, []);
-
-  useEffect(() => {
-    if (isThrowing) {
-      api.velocity.set(0, 0, 20);
-      setIsThrowing(false);
-      // マンガエフェクトを起動
-      setFireEffect(true);
-      // change manage effect position to ball position
-      setEffectPosition([position[0], position[1] - 0.5, position[2]]);
-      // ボールのスケールをかえる。 スローイングスケール。
-      gsap.killTweensOf(ballThrowingScaleRef);
-      gsap.to(ballThrowingScaleRef, {
-        current: 1.6,
-        duration: 0.1,
-        ease: "Power4.out",
-        onUpdate: () => {
-          setBallThrowingScale(ballThrowingScaleRef.current);
-        },
-        onComplete: () => {
-          setBallThrowingScale(ballThrowingScaleRef.current);
-        },
-      });
-      gsap.to(ballThrowingScaleRef, {
-        current: 1,
-        duration: 0.8,
-        delay: 0.1,
-        // ease: "Power4.inOut",
-        onUpdate: () => {
-          setBallThrowingScale(ballThrowingScaleRef.current);
-        },
-        onComplete: () => {
-          setBallThrowingScale(ballThrowingScaleRef.current);
-        },
-      });
-
-      // 3秒後にボールのスケールを小さくして、フェードアウトする。
-      gsap.killTweensOf([ballScaleRef, strechScaleRef]);
-      gsap.to(ballScaleRef, {
-        current: 0.01,
-        duration: 0.6,
-        delay: 3,
-        ease: "Power4.Out",
-        onStart: () => {
-          setBallScale(ballScaleRef.current);
-          api.applyImpulse([0, 6, 0], [0, 0, 0]);
-        },
-        onUpdate: () => {
-          setBallScale(ballScaleRef.current);
-        },
-        onComplete: () => {
-          setBallScale(ballScaleRef.current);
-          setForceReset(true);
-        },
-      });
-      gsap.to(strechScaleRef, {
-        current: 1,
-        duration: 0.4,
-        delay: 3.0,
-        ease: "Back.out",
-        startAt: { current: 2 },
-        onUpdate: () => {
-          setStrechScale(strechScaleRef.current);
-        },
-        onComplete: () => {
-          setStrechScale(strechScaleRef.current);
-        },
-      });
-    }
-  }, [isThrowing]);
-
-  // ボールをリセットする。
-  // 最初の位置に戻す。
-  const resetThrowBall = () => {
-    api.velocity.set(0, 0, 0);
-    api.rotation.set(0, 0, 0);
-    api.angularVelocity.set(0, 0, 0);
-    api.position.set(position[0], position[1] + 1, position[2]);
-  };
-
-  const startAutoThrow = () => {
-    gsap.killTweensOf([throwValueRef, ballScaleRef, strechScaleRef]);
-    // 投球のゲージが増えるアニメーション
-    gsap.to(throwValueRef, {
-      startAt: { current: 0 },
-      current: 1,
-      duration: 2,
-      onUpdate: () => {
-        setThrowValue(throwValueRef.current);
-      },
-      onComplete: () => {
-        setThrowValue(throwValueRef.current);
-        setIsThrowing(true);
-        gsap.to(throwValueRef, {
-          current: 2,
-          duration: 0.1,
-          ease: "Power4.out",
-          onUpdate: () => {
-            setThrowValue(throwValueRef.current);
-          },
-        });
-      },
-    });
-
-    // ボールのスケールのアニメーション
-    gsap.to(ballScaleRef, {
-      current: 1,
-      duration: 0.2,
-      ease: "Back.out",
-      onUpdate: () => {
-        setBallScale(ballScaleRef.current);
-      },
-    });
-
-    gsap.to(strechScaleRef, {
-      startAt: { current: 2 },
-      current: 1,
-      duration: 0.8,
-      ease: "Power4.inOut",
-      onUpdate: () => {
-        setStrechScale(strechScaleRef.current);
-      },
-      onComplete: () => {
-        setStrechScale(strechScaleRef.current);
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (forceReset) {
-      // 球場内のボールをリセットし、投球のゲージをリセットする。
-      // 最初の位置に戻す。
-      resetThrowBall();
-
-      // 投球のゲージをリセットする。
-      startAutoThrow();
-      ballScaleRef.current = 0.01;
-      setBallScale(0.01);
-
-      // ボールの登場エフェクトに使うフラグをtrueにする。
-      setIsFireEffectOn(true);
-      setForceReset(false);
-    }
-  }, [forceReset]);
-
-  const handleCollide = (e: CollideEvent) => {
-    const collidedBody = e.body;
-    if (collidedBody.userData.type === "bat") {
-      const collisionPoint = e.contact.contactPoint as [number, number, number];
-      setEffectPosition(collisionPoint);
-      setFireEffect(true);
-      const collisionNormal = e.contact.contactNormal as [
-        number,
-        number,
-        number
-      ];
-      applyPulseToBat(
-        collisionPoint,
-        collisionNormal,
-        e.contact.impactVelocity
-      );
-    }
-  };
-
-  const applyPulseToBat = (
-    point: [number, number, number],
-    normal: [number, number, number],
-    impactVal: number
-  ) => {
-    if (batApiRef.current) {
-      const forceMagnitude = Math.min(Math.max(impactVal * 2, 0), 100);
-      const force = new Vector3(normal[0], normal[1], normal[2]).multiplyScalar(
-        forceMagnitude
-      );
-      // .add(new Vector3(0, 10, 0));
-      batApiRef.current.applyImpulse(force.toArray(), point);
-    }
-  };
-
-  return (
-    <group>
-      <group position={[0.5, 0.5 + 0.3, -6]}>
-        <mesh>
-          <planeGeometry args={[0.3, 1]} />
-          <meshBasicMaterial
-            color="#ffffff"
-            side={DoubleSide}
-            transparent
-            opacity={0.2}
-          />
-        </mesh>
-
-        <mesh
-          position={[0, -0.5 * (1 - throwValue), 0.01]}
-          scale={[1, throwValue < 1 ? throwValue : 2 - throwValue, 1]}
-        >
-          <planeGeometry args={[0.22, 0.9]} />
-          <meshBasicMaterial color="#ffffff" side={DoubleSide} />
-        </mesh>
-      </group>
-
-      <group ref={ref} castShadow>
-        <mesh
-          scale={[
-            ballScale / ballThrowingScale / Math.sqrt(strechScale),
-            ballScale * strechScale,
-            (ballScale * ballThrowingScale) / Math.sqrt(strechScale),
-          ]}
-          geometry={(nodes["baseball"] as Mesh).geometry}
-          material={materials["Material.001"]}
-          castShadow
-          receiveShadow
-        />
-      </group>
-    </group>
-  );
-}
+import { PitchingMachine } from "./pitching-machine";
 
 function Bat({ isSwinging }: { isSwinging: boolean }) {
   const swingRef = useRef(0);
-  const [theta, setTheta] = useState(0);
+  const [theta, setTheta] = useState(-Math.PI / 2);
   const [buttonProgress, setButtonProgress] = useState(0);
   const [buttonActiveProgress, setButtonActiveProgress] = useState(0);
   const [buttonIdleProgress, setButtonIdleProgress] = useState(0);
@@ -551,13 +294,13 @@ export function Scene({
   isSwinging,
   isDebug,
 }: SceneProps) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const [effectPosition, setEffectPosition] = useState<
     [number, number, number]
   >([0, 0, 0]);
   const [fireEffect, setFireEffect] = useState(false);
   const [isFireEffectOn, setIsFireEffectOn] = useState(false);
-
+  const [mangaEffectScale, setMangaEffectScale] = useState(1);
   useEffect(() => {
     if (camera) {
       camera.lookAt(new Vector3(0, 0, -5));
@@ -565,21 +308,17 @@ export function Scene({
   }, [camera]);
 
   useEffect(() => {
-    if (camera) {
-      if (isDebug) {
-        camera.position.set(0, 5, 20);
-      } else {
-        camera.position.set(0, 2, 4);
-      }
-    }
-  }, [isDebug]);
+    (camera as PerspectiveCamera).fov = getFov();
+    (camera as PerspectiveCamera).aspect = size.width / size.height;
+    (camera as PerspectiveCamera).updateProjectionMatrix();
+  }, [camera, size]);
 
   return (
     <Physics
       iterations={20}
       defaultContactMaterial={{
-        friction: 0.1,
-        restitution: 0.3,
+        friction: 5,
+        restitution: 0.7,
       }}
       gravity={[0, -20, 0]}
     >
@@ -589,6 +328,7 @@ export function Scene({
           position={effectPosition}
           fireEffect={fireEffect}
           setFireEffect={setFireEffect}
+          mangaEffectScale={mangaEffectScale}
         />
         <Stadium />
         <FireEffect
@@ -596,13 +336,14 @@ export function Scene({
           isFireEffectOn={isFireEffectOn}
           setIsFireEffectOn={setIsFireEffectOn}
         />
-        <Ball
+        <PitchingMachine
           setEffectPosition={setEffectPosition}
           position={ballPosition}
           isThrowing={isThrowing}
           setIsThrowing={setIsThrowing}
           setFireEffect={setFireEffect}
           setIsFireEffectOn={setIsFireEffectOn}
+          setMangaEffectScale={setMangaEffectScale}
         />
         <Bat isSwinging={isSwinging} />
         <TouchEffect isSwinging={isSwinging} />
@@ -627,10 +368,12 @@ function MangaEffect({
   position,
   fireEffect,
   setFireEffect,
+  mangaEffectScale,
 }: {
   position: [number, number, number];
   fireEffect: boolean;
   setFireEffect: Dispatch<SetStateAction<boolean>>;
+  mangaEffectScale: number;
 }) {
   const [progress, setProgress] = useState(1);
   const progressRef = useRef(0);
@@ -669,10 +412,10 @@ void main() {
     vec2 toCenter = st - vec2(0.5);
     float angle = atan(toCenter.y, toCenter.x);
     float radius = length(toCenter);
-    float mask = smoothstep(0.0, 1.0 * u_progress, radius);
-    float mask2 = 1.0 - smoothstep(0.1, 0.5 , radius);
-    float color = mask;
-    gl_FragColor = vec4(color, color, color, color * mask2);
+    // float mask = smoothstep(0.5 * u_progress, 1.0 * u_progress, radius);
+    float mask2 = 1.0 - smoothstep(0.4, 0.5, radius);
+    float fadeout = clamp(1.0 - u_progress , 0.0, 1.0) * 0.8;
+    gl_FragColor = vec4(vec3(1.0),  mask2 * fadeout * min(u_progress * 5.0, 1.0));
 }
   `;
 
@@ -690,7 +433,11 @@ void main() {
   return (
     <group rotation={[-Math.PI / 2, 0, 0]} position={position}>
       {progress < 1 ? (
-        <mesh rotation={[-Math.PI / 2, 0, 0]} ref={ref}>
+        <mesh
+          rotation={[-Math.PI / 2, 0, 0]}
+          ref={ref}
+          scale={mangaEffectScale * progress + 0.5}
+        >
           <planeGeometry args={[1, 1]} />
           <shaderMaterial
             transparent
@@ -705,11 +452,22 @@ void main() {
   );
 }
 
+function getFov() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  const rate = height / width > 1 ? height / width : 1;
+  const fov = Math.atan((rate * 1.4 * 2) / 6) * 2 * (180 / Math.PI);
+  return fov;
+}
+
 export function BaseballGame() {
   const [ballPosition] = useState<[number, number, number]>([0, 0.8, -6]);
   const [isThrowing, setIsThrowing] = useState(false);
   const [isSwinging, setIsSwinging] = useState(false);
   const [isDebug] = useState(false);
+  const fov = useMemo(() => {
+    return getFov();
+  }, []);
 
   const swingStart = () => {
     setIsSwinging(true);
@@ -719,37 +477,35 @@ export function BaseballGame() {
   };
 
   return (
-    <div className="w-full h-screen relative">
-      <Canvas
-        shadows
-        onPointerDown={swingStart}
-        onPointerUp={swingEnd}
-        camera={{ fov: 60, position: [0, 1.5, 2] }}
-      >
-        <color attach="background" args={["#333"]} />
-        {isDebug ? <OrbitControls /> : null}
-        {isDebug && <axesHelper position={[0, 0.1, 0]} />}
-        <ambientLight intensity={0.4} />
-        <spotLight
-          angle={Math.PI * 0.1}
-          castShadow
-          decay={0}
-          intensity={Math.PI * 0.4}
-          penumbra={1}
-          position={[0, 20, 30]}
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-          shadow-bias={-0.0001}
-        />
+    <Canvas
+      shadows
+      onPointerDown={swingStart}
+      onPointerUp={swingEnd}
+      camera={{ fov: fov, position: [0, 1, 3] }}
+    >
+      <color attach="background" args={["#287ABE"]} />
+      {isDebug ? <OrbitControls /> : null}
+      {isDebug && <axesHelper position={[0, 0.1, 0]} />}
+      <ambientLight intensity={0.4} />
+      <spotLight
+        angle={Math.PI * 0.3}
+        castShadow
+        decay={0}
+        intensity={Math.PI * 0.4}
+        penumbra={1}
+        position={[0, 20, 30]}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-bias={-0.0001}
+      />
 
-        <Scene
-          ballPosition={ballPosition}
-          isThrowing={isThrowing}
-          setIsThrowing={setIsThrowing}
-          isSwinging={isSwinging}
-          isDebug={isDebug}
-        />
-      </Canvas>
-    </div>
+      <Scene
+        ballPosition={ballPosition}
+        isThrowing={isThrowing}
+        setIsThrowing={setIsThrowing}
+        isSwinging={isSwinging}
+        isDebug={isDebug}
+      />
+    </Canvas>
   );
 }
