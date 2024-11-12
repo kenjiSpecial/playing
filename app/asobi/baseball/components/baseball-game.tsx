@@ -308,7 +308,11 @@ export function Scene({
   }, [camera]);
 
   useEffect(() => {
-    (camera as PerspectiveCamera).fov = getFov();
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const rate = height / width > 1 ? height / width : 1;
+    const fov = Math.atan((rate * 1.4 * 2) / 6) * 2 * (180 / Math.PI);
+    (camera as PerspectiveCamera).fov = fov;
     (camera as PerspectiveCamera).aspect = size.width / size.height;
     (camera as PerspectiveCamera).updateProjectionMatrix();
   }, [camera, size]);
@@ -452,21 +456,17 @@ void main() {
   );
 }
 
-function getFov() {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const rate = height / width > 1 ? height / width : 1;
-  const fov = Math.atan((rate * 1.4 * 2) / 6) * 2 * (180 / Math.PI);
-  return fov;
-}
-
 export function BaseballGame() {
   const [ballPosition] = useState<[number, number, number]>([0, 0.8, -6]);
   const [isThrowing, setIsThrowing] = useState(false);
   const [isSwinging, setIsSwinging] = useState(false);
   const [isDebug] = useState(false);
   const fov = useMemo(() => {
-    return getFov();
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const rate = height / width > 1 ? height / width : 1;
+    const fov = Math.atan((rate * 1.4 * 2) / 6) * 2 * (180 / Math.PI);
+    return fov;
   }, []);
 
   const swingStart = () => {
