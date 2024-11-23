@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import images from "@/data/asobi.json";
+
 export default function Component() {
   return (
     <div className="container mx-auto px-4 py-8">
@@ -8,7 +9,7 @@ export default function Component() {
         あそびば - Asobiba -
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {images.map((artwork, index) => (
+        {[...images].reverse().map((artwork, index) => (
           <div
             key={index}
             className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"

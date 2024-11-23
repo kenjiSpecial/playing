@@ -1,12 +1,12 @@
 [
   {
-    "title": "Baseball Game",
-    "link": "/asobi/baseball",
-    "src": "/assets/images/asobi/baseball/thumbnail.png",
-    "alt": "Baseball Game",
+    "title": "Game Boy - Exploded View",
+    "link": "/asobi/gameboy-exploded-view",
+    "src": "/assets/images/asobi/glb-sample1/thumbnail.png",
+    "alt": "Game Boy - Exploded View",
     "width": 640,
     "height": 360,
-    "description": "Enjoy a simple yet engaging 3D baseball experience."
+    "description": "Exploded view of Nintendo Game Boy components, glb model with animation."
   },
   {
     "title": "Virtual Bowling Fun",
@@ -18,12 +18,21 @@
     "description": "Enjoy a simple yet engaging 3D bowling experience."
   },
   {
-    "title": "Game Boy - Exploded View",
-    "link": "/asobi/gameboy-exploded-view",
-    "src": "/assets/images/asobi/glb-sample1/thumbnail.png",
-    "alt": "Game Boy - Exploded View",
+    "title": "Baseball Game",
+    "link": "/asobi/baseball",
+    "src": "/assets/images/asobi/baseball/thumbnail.png",
+    "alt": "Baseball Game",
     "width": 640,
     "height": 360,
-    "description": "Exploded view of Nintendo Game Boy components, glb model with animation."
+    "description": "Enjoy a simple yet engaging 3D baseball experience."
+  },
+  {
+    "title": "Bitcoin Rocket",
+    "link": "/asobi/bitcoin-rocket",
+    "src": "/assets/images/asobi/bitcoin-rocket/thumbnail.png",
+    "alt": "Bitcoin Rocket",
+    "width": 640,
+    "height": 360,
+    "description": "A 3D model of a bitcoin rocket that flies to the moon."
   }
 ]
