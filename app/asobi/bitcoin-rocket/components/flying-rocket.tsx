@@ -67,7 +67,9 @@ function Rocket({ index }: { index: number }) {
       rocketRef.current.position.y += delta * 2;
       rocketRef.current.rotation.z = Math.sin(state.clock.elapsedTime) * 0.05; // 少し揺れるアニメーション
 
-      camera.lookAt(rocketRef.current.position);
+      camera.lookAt(
+        rocketRef.current.position.clone().add(new Vector3(0, 2, 0))
+      );
     }
   });
 
