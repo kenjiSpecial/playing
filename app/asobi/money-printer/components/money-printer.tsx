@@ -4,7 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Clone, useGLTF } from "@react-three/drei";
 import { useEffect, useRef, useState } from "react";
 import { Group, MathUtils, Mesh, Vector3 } from "three";
-import { OrbitControls, Stars } from "@react-three/drei";
+import { Stars } from "@react-three/drei";
 import gsap from "gsap";
 
 function Printer() {
