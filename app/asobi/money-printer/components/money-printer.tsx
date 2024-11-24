@@ -177,7 +177,6 @@ export function MoneyPrinter() {
       <Bill initialPosition={[0, 2.5, -5.5]} />
       <Bill initialPosition={[0, 2.5, -7]} />
       <Stars />
-      <OrbitControls enableZoom={false} />
     </Canvas>
   );
 }
