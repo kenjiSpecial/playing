@@ -34,5 +34,14 @@
     "width": 640,
     "height": 360,
     "description": "A 3D model of a bitcoin rocket that flies to the moon."
+  },
+  {
+    "title": "Money Printer",
+    "link": "/asobi/money-printer",
+    "src": "/assets/images/asobi/money-printer/thumbnail.png",
+    "alt": "Money Printer",
+    "width": 640,
+    "height": 360,
+    "description": "Money, Money, Money!"
   }
 ]
