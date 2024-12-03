@@ -35,7 +35,11 @@ import { SkeletonUtils } from "three/examples/jsm/Addons.js";
 
 const isDebug = false;
 
-export function GameScene() {
+export function GameScene({
+  setIsLoading,
+}: {
+  setIsLoading: (isLoading: boolean) => void;
+}) {
   const { scene, camera } = useThree();
 
   const engineRef = useRef(
@@ -74,13 +78,7 @@ export function GameScene() {
   const playerMove = useRef(0);
 
   useEffect(() => {
-    if (!scene || !gameObjectsRef.current) return;
-    // gameObjectRefがすべてあるか確認、なければreturnする
-    gameObjectsRef.current.forEach((obj) => {
-      if (!obj) {
-        return;
-      }
-    });
+    setIsLoading(false);
 
     const engine = engineRef.current;
     const world = engine.world;
@@ -301,7 +299,7 @@ export function GameScene() {
 
   return (
     <>
-      <ambientLight intensity={0.2} />
+      <ambientLight intensity={0.3} />
       {/* <pointLight position={[0, 10, -10]} intensity={1} /> */}
       <spotLight
         angle={Math.PI}
@@ -309,7 +307,7 @@ export function GameScene() {
         decay={0.1}
         intensity={Math.PI}
         penumbra={1}
-        position={[0, 200, 100]}
+        position={[0, 300, 200]}
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-bias={-0.0001}
