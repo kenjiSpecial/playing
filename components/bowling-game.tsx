@@ -505,13 +505,6 @@ export function BowlingGame() {
           />
         </Physics>
       </Canvas>
-      {/* <button
-        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={throwBall}
-        disabled={isBallRolling}
-      >
-        ボールを投げる
-      </button> */}
     </div>
   );
 }

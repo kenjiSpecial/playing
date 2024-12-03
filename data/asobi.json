@@ -43,5 +43,12 @@
     "width": 640,
     "height": 360,
     "description": "Money, Money, Money!"
+  },
+  {
+    "title": "Suica Game",
+    "link": "/asobi/suica-game",
+    "src": "/assets/images/asobi/suica-game/thumbnail.png",
+    "alt": "Suica Game",
+    "description": "Suica Game"
   }
 ]
