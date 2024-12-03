@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { GameScene } from "./Scene";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function PhysicsScene() {
   const [isLoading, setIsLoading] = useState(true);
